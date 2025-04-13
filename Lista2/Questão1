@@ -1,1 +1,107 @@
-//aqui vai a questao 1
+//ACTIVITY_MAIN.XML
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/checkArroz"
+        android:text="Arroz 1 Kg (R$ 2,69)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkLeite"
+        android:text="Leite longa vida (R$ 2,70)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkCarne"
+        android:text="Carne Friboi (R$ 16,70)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkFeijao"
+        android:text="Feijão carioquinha 1 Kg (R$ 3,38)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkRefrigerante"
+        android:text="Refrigerante Coca-Cola 2L (R$ 3,00)"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnCalcular"
+        android:text="Calcular Total"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#f37021"/>
+
+    <TextView
+        android:id="@+id/txtResultado"
+        android:text="Total: R$ 0,00"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"/>
+
+</LinearLayout>
+
+
+//MAINACTIVITY.JAVA
+
+package com.example.sistemadecompras;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    CheckBox checkArroz, checkLeite, checkCarne, checkFeijao, checkRefrigerante;
+    Button btnCalcular;
+    TextView txtResultado;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        checkArroz = findViewById(R.id.checkArroz);
+        checkLeite = findViewById(R.id.checkLeite);
+        checkCarne = findViewById(R.id.checkCarne);
+        checkFeijao = findViewById(R.id.checkFeijao);
+        checkRefrigerante = findViewById(R.id.checkRefrigerante);
+        btnCalcular = findViewById(R.id.btnCalcular);
+        txtResultado = findViewById(R.id.txtResultado);
+
+        btnCalcular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                double total = 0.0;
+
+                if (checkArroz.isChecked()) total += 2.69;
+                if (checkLeite.isChecked()) total += 2.70;
+                if (checkCarne.isChecked()) total += 16.70;
+                if (checkFeijao.isChecked()) total += 3.38;
+                if (checkRefrigerante.isChecked()) total += 3.00;
+
+                txtResultado.setText(String.format("Total: R$ %.2f", total));
+            }
+        });
+    }
+}
+
