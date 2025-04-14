@@ -1,0 +1,336 @@
+//ACTIVITY_PIZZA.XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Escolha o sabor da sua pizza: " />
+
+
+    <CheckBox
+        android:id="@+id/cbCalabresa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Calabresa" />
+
+    <CheckBox
+        android:id="@+id/cbMarguerita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Marguerita" />
+    />
+
+    <CheckBox
+        android:id="@+id/cbPortuguesa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Portuguesa" />
+    />
+
+    <Button
+        android:id="@+id/btnAvancar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Avançar" />
+</LinearLayout>
+
+//PIZZAACTIVITY.JAVA
+
+package com.example.pizzaria;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class PizzaActivity extends AppCompatActivity {
+
+    CheckBox cbCalabresa, cbMarguerita, cbPortuguesa;
+    Button btnAvancar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pizza);
+
+
+        cbCalabresa = findViewById(R.id.cbCalabresa);
+        cbMarguerita = findViewById(R.id.cbMarguerita);
+        cbPortuguesa = findViewById(R.id.cbPortuguesa);
+        btnAvancar = findViewById(R.id.btnAvancar);
+
+
+        btnAvancar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                StringBuilder pizzasSelecionadas = new StringBuilder();
+                if (cbCalabresa.isChecked()) {
+                    pizzasSelecionadas.append("Calabresa, ");
+                }
+                if (cbMarguerita.isChecked()) {
+                    pizzasSelecionadas.append("Marguerita, ");
+                }
+                if (cbPortuguesa.isChecked()) {
+                    pizzasSelecionadas.append("Portuguesa, ");
+                }
+
+
+                if (pizzasSelecionadas.length() == 0) {
+                    Toast.makeText(PizzaActivity.this, "Selecione pelo menos uma pizza", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                pizzasSelecionadas.setLength(pizzasSelecionadas.length() - 2);
+
+
+                Intent intent = new Intent(PizzaActivity.this, TamanhoPagamentoActivity.class);
+                intent.putExtra("pizzas", pizzasSelecionadas.toString());
+                startActivity(intent);
+            }
+        });
+    }
+}
+
+//ACTIVITYTAMANHOPAGAMENTO.XML
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <TextView
+        android:id="@+id/txtResumo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escolha o tamanho:"
+    />
+    <RadioGroup
+        android:id="@+id/rgTamanho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rbPequena"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pequena - R$20,00" />
+
+        <RadioButton
+            android:id="@+id/rbMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Média - R$30,00" />
+
+        <RadioButton
+            android:id="@+id/rbGrande"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grande - R$40,00" />
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/txtPagamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escolha o pagamento:"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp" />
+    <RadioGroup
+        android:id="@+id/rgPagamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/rbDinheiro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dinheiro" />
+
+        <RadioButton
+            android:id="@+id/rbCartao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cartão" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnFinalizar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finalizar Pedido" />
+</LinearLayout>
+
+//TAMANHOPAGAMENTOACTIVITY.JAVA
+
+package com.example.pizzaria;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class TamanhoPagamentoActivity extends AppCompatActivity {
+
+    RadioGroup rgTamanho, rgPagamento;
+    Button btnConfirmar;
+    String pizzasSelecionadas;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tamanho_pagamento);
+
+
+        pizzasSelecionadas = getIntent().getStringExtra("pizzas");
+
+        rgTamanho = findViewById(R.id.rgTamanho);
+        rgPagamento = findViewById(R.id.rgPagamento);
+        View btnFinalizar = findViewById(R.id.btnFinalizar);
+
+        btnConfirmar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int selectedTamanhoId = rgTamanho.getCheckedRadioButtonId();
+                RadioButton rbTamanho = findViewById(selectedTamanhoId);
+                String tamanho = rbTamanho.getText().toString();
+
+
+                int selectedPagamentoId = rgPagamento.getCheckedRadioButtonId();
+                RadioButton rbPagamento = findViewById(selectedPagamentoId);
+                String pagamento = rbPagamento.getText().toString();
+
+
+                Intent intent = new Intent(TamanhoPagamentoActivity.this, com.example.pizzaria.ResumoPedidoActivity.class);
+                intent.putExtra("pizzas", pizzasSelecionadas);
+                intent.putExtra("pagamento", pagamento);
+                startActivity(intent);
+            }
+        });
+    }
+}
+//ACTIVITYRESUMOPEDIDO.XML
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtResumoTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resumo do Pedido"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/txtPizzasEscolhidas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pizzas escolhidas:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/txtTamanho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tamanho:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/txtPagamento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pagamento:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/txtValorTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Valor Total:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>
+
+//RESUMOPEDIDOACTIVITY.JAVA
+
+package com.example.pizzaria;
+
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ResumoPedidoActivity extends AppCompatActivity {
+
+    TextView txtPizzasEscolhidas, txtTamanho, txtPagamento, txtValorTotal;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_resumo_pedido);
+
+
+        txtPizzasEscolhidas = findViewById(R.id.txtPizzasEscolhidas);
+        txtTamanho = findViewById(R.id.txtTamanho);
+        txtPagamento = findViewById(R.id.txtPagamento);
+        txtValorTotal = findViewById(R.id.txtValorTotal);
+
+        String pizzas = getIntent().getStringExtra("pizzas");
+        String tamanho = getIntent().getStringExtra("tamanho");
+        String pagamento = getIntent().getStringExtra("pagamento");
+
+
+        txtPizzasEscolhidas.setText("Pizzas escolhidas: " + pizzas);
+        txtTamanho.setText("Tamanho: " + tamanho);
+        txtPagamento.setText("Pagamento: " + pagamento);
+
+
+        double valor = 0;
+        if (tamanho.equals("Pequena")) {
+            valor = 20.0;
+        } else if (tamanho.equals("Média")) {
+            valor = 30.0;
+        } else if (tamanho.equals("Grande")) {
+            valor = 40.0;
+        }
+
+
+        txtValorTotal.setText(String.format("Valor Total: R$ %.2f", valor));
+    }
+}
